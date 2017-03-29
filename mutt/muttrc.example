@@ -1,0 +1,124 @@
+
+
+# die welt ist so schon zu laut ...
+#set beep=yes
+set beep_new
+
+# markiere nachrichten nicht als Old, wenn ich sie noch nicht gelesen habe
+unset mark_old
+
+# farben etc
+color normal default default
+#color tree default yellow
+#color status white blue
+color status blue default
+color indicator black cyan
+color quoted1 green white
+color quoted2 brightblue white
+color signature green black
+
+# ... was sonst :)
+#set editor='mvim + -c "set textwidth=72" -c "set wrap"'
+set editor='mvim'
+
+# Header: damit nicht u.u. der rechnername darin auftaucht
+my_hdr From:     ""
+my_hdr Reply-To: ""
+set hostname  = ""
+
+set from      = ""
+set realname  = ""
+
+set imap_user = ""
+set imap_pass = ""
+
+set smtp_url  = ""
+set smtp_pass = ""
+
+set folder    = "imaps://imap.gmail.com:993/[Google Mail]/"
+set spoolfile = imaps://imap.gmail.com:993/INBOX
+set postponed = "+Drafts"
+set record    = "+Gesendet"
+save-hook "~A" "+Alle Nachrichten"
+set header_cache =~/.mutt/cache/headers
+
+set message_cachedir =~/.mutt/cache/bodies
+
+set save_name
+set copy=yes
+set fast_reply=yes
+set abort_unmodified=ask-yes
+set quit=ask-yes
+set print=yes
+set askcc=no
+set pager=less
+set mail_check=60
+set mailcap_path="~/.mutt/mailcap"
+set delete=yes
+set forward_format="%s (fwd)"
+set auto_tag
+unset prompt_after 
+unset wait_key
+unset confirmappend
+set signature = "~/.mutt/signature"
+set sig_dashes = no
+
+set autoedit
+set abort_unmodified=no
+set include=yes
+
+ignore *
+unignore from date subject to cc x-mailer:
+
+# Einstellungen fuer SSL
+set certificate_file=~/.mutt/muttrc_certificate_file_ssl
+set ssl_use_sslv3=yes
+set ssl_use_tlsv1=no
+set ssl_use_sslv2=no
+#set imap_force_ssl
+
+# Einstellungen fuer die Benutzung des imap-servers
+set imap_servernoise=no
+set imap_list_subscribed=no
+
+#source ~/.mutt/personal
+# Status Bar -----------------------------------------
+set status_chars  = " *%A"
+set status_format = "---[ Folder: %f ]---[%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]---%>-%?p?( %p postponed )?---"
+
+# Index View Options ---------------------------------
+set date_format = "%m/%d"
+#set index_format = "[%Z]  %D  %-20.20F  %s"
+set index_format="%4C %Z %[!%b %d %Y] %-17.17F (%3l) %s"
+set sort = threads                         # like gmail
+set sort_aux = reverse-last-date-received  # like gmail
+set uncollapse_jump                        # don't collapse on an unread message
+set sort_re                                # thread based on regex
+set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
+
+macro index \cb |urlview\n
+macro pager \cb |urlview\n
+
+bind index + next-page
+bind index - previous-page
+bind pager q exit
+
+bind index gg       first-entry
+bind index G        last-entry
+
+bind index \Cr      imap-fetch-mail
+
+bind index R        group-reply
+bind index <tab>    sync-mailbox
+bind index <space>  collapse-thread
+
+bind index,pager o change-folder
+bind index,pager c mail
+
+bind compose <return> send-message
+bind compose v view-attach
+
+# Adressbuch unter MacOSX abfragen
+set query_command = "contacts -Sf '%eTOKEN%n' '%s' | sed -e 's/TOKEN/\t/g'"
+bind editor <Tab> complete-query
+bind editor ^T    complete
