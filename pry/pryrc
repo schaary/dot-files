@@ -1,0 +1,67 @@
+# That is my old pryrc file
+require 'hirb'
+require 'securerandom'
+
+Pry.config.print = proc do |output, value|
+  Hirb::View.view_or_page_output(value) || Pry::DEFAULT_PRINT.call(output, value)
+end
+
+Pry.config.editor = "vim"
+Pry.config.prompt = [proc{"#{RUBY_VERSION} >> "}, proc{"#{RUBY_VERSION} | "}]
+#
+# Here starts my new one
+
+# === EDITOR ===
+Pry.editor = 'vim'
+
+# === Listing config ===
+# Better colors - by default the headings for methods are too 
+# similar to method name colors leading to a "soup"
+# These colors are optimized for use with Solarized scheme 
+# for your terminal
+Pry.config.ls.separator = "\n" # new lines between methods
+Pry.config.ls.heading_color = :magenta
+Pry.config.ls.public_method_color = :green
+Pry.config.ls.protected_method_color = :yellow
+Pry.config.ls.private_method_color = :bright_black
+
+# == PLUGINS ===
+# awesome_print gem: great syntax colorized printing
+# look at ~/.aprc for more settings for awesome_print
+begin
+  require 'awesome_print'
+#   # The following line enables awesome_print for all pry output,
+#   # and it also enables paging
+  Pry.config.print = proc {|output, value| Pry::Helpers::BaseHelpers.stagger_output("=> #{value.ai}", output)}
+
+#   # If you want awesome_print without automatic pagination, use the line below
+#   # Pry.config.print = proc { |output, value| output.puts value.ai }
+rescue LoadError => err
+  puts "gem install awesome_print  # <-- highly recommended"
+end
+
+Pry.config.commands.command "start_plsql", "setup ruby-plsql and connect umt" do |*args|
+  begin
+    require 'ruby-plsql'
+    plsql.connection = OCI8.new ENV['UMT_USER'],ENV['UMT_PASSWORD'],ENV['UMT_SID']
+    puts "ok"
+  rescue
+    puts "false"
+  end
+end
+
+@pg = nil
+Pry.config.commands.command "start_zuv", "setup postgresql and connect ZUV database" do |*args|
+  begin
+    require 'pg'
+    @pg = PG::Connection.new dbname: ENV.fetch('PG_ZUV_INSTANCE'), 
+           host: ENV.fetch('PG_ZUV_HOST'),
+           port: ENV.fetch('PG_ZUV_PORT'), 
+           user: ENV.fetch('PG_ZUV_USER'), 
+           password: ENV.fetch('PG_ZUV_PASSWORD') 
+    p @pg
+    puts "ok"
+  rescue
+    puts "false"
+  end
+end
