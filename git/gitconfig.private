@@ -1,0 +1,51 @@
+[core]
+  editor = vim
+  excludesfile = /Users/nmaef/.gitignore
+[user]
+  name = Michael Schaarschmidt
+	email = schaarschmidt@mac.com
+[alias]
+  ad = !git add -A && git diff --cached
+  # Log display from screencast, with train tracks.
+  l = log --graph --pretty=format':%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset'
+  lg = log --graph --pretty=format:'%C(yellow)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative -10
+  lgf = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+  # Alternate log display from Scott Chacon
+  lol = log --pretty=oneline --abbrev-commit --graph --decorate
+  # Other useful aliases:
+  unstage = reset HEAD
+  staged = diff --cached
+  unstaged = diff
+  current-branch = !git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||'
+  # Usage: git track origin/feature-123-login-form
+  track = checkout -t
+  ds = diff --stat
+  dsm = diff --stat master
+[apply]
+  whitespace = warn
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = true
+[help]
+  autocorrect = 1
+[status]
+  submodule = 1
+[push]
+  # Only push branches that have been set up to track a remote branch.
+  default = current
+[mergetool]
+    keepBackup = true
+  prompt = false
+[github]
+    user=schaary
+[diff]
+  tool = vimdiff
+[difftool]
+  prompt = false
+[branch "master"]
+  rebase = true
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f

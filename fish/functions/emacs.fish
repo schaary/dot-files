@@ -1,5 +1,5 @@
-#!/usr/bin/env fish
+!/usr/bin/env fish
 
-#function emacs
-#  /usr/bin/emacsclient-snapshot -a '' -t $argv
-#end
+function emacs
+  /usr/local/bin/emacsclient -a '' -t $argv
+end
